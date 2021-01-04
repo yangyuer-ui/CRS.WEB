@@ -16,7 +16,9 @@
         font-size: 23px;
         display: none;
     }
-
+    li:hover{
+        background-color:#eee;
+    }
     ul {
         display: inline-block;
     }
@@ -30,6 +32,7 @@
         position: absolute;
         left: 0;
         top: 0;
+        font-size: 15px;
         z-index: 10;
         width: fit-content;
         height: auto;
@@ -50,7 +53,7 @@
                 if (path.ID == station.Path.ID)
                 {
                    
-        <li class="station" id="station" data-id="@station.ID">
+        <li class="station" id="station" data-id="@station.ID" date-Path="@station.Path.ID">
             <input type="hidden" value="@station.ID" />@*点击菜单1时，获取到这个value*@
             <input type="hidden" value="@station.Path.ID" />@*点击菜单1时，获取到这个value*@
             @station.StationName
@@ -90,11 +93,12 @@
             e.preventDefault(); //禁用默认事件
             $('#context-menu').hide().html('')
             const stationId = stationItem.getAttribute('data-id');  //站点ID
+            const pathId = stationItem.getAttribute('date - Path');  //路线ID
             //坐标
             const x = e.clientX,
                 y = e.clientY;
             //创建菜单
-            createMenu('添加', 'AddMenu', index, stationId);
+            createMenu('添加', 'AddMenu', index, stationId, pathId);
             createMenu('删除', 'DelMenu', index, stationId);
             createMenu('修改', 'EditMenu', index, stationId);
             $('#context-menu').css('left',x).css('top',y).show();   //显示自定义右键菜单
@@ -102,23 +106,23 @@
     }
 
     //创建菜单项并且插入到菜单框
-    function createMenu(text,menuId,index,stationId) {
+    function createMenu(text, menuId, index, stationId, pathId) {
         const menuItem = document.createElement('div'); //创建一个div为菜单项
         menuItem.setAttribute('id', menuId);
         menuItem.innerText = text;  //菜单项文字
-        menuItem.addEventListener('click', function () { clickMenuItem(index, menuId, stationId) }, false);    //菜单项点击事件
+        menuItem.addEventListener('click', function () { clickMenuItem(index, menuId, stationId, pathId) }, false);    //菜单项点击事件
         $('#context-menu').append(menuItem);    //将菜单项插入到菜单框中
     }
 
     //点击菜单项
-    function clickMenuItem(index, menuId, stationId) {
+    function clickMenuItem(index, menuId, stationId,pathId) {
         //在此处写对应菜单的业务
         layui.use(['laypage', 'layer', 'table', 'element', 'jquery'], function () {
             if (menuId === 'EditMenu') {
                 layer.open({
                     type: 2,
                     area: ['600px', '500px'],
-                    title: "编辑用户信息",
+                    title: "编辑站点信息",
                     content: '/Station/Edit?id=' + stationId,
                     end: function () {
                         window.location.reload();
@@ -128,7 +132,7 @@
                 layer.open({
                     type: 2,
                     area: ['600px', '500px'],
-                    title: "编辑用户信息",
+                    title: "添加站点信息",
                     content: '/Station/Create',
                     end: function () {
                         window.location.reload();

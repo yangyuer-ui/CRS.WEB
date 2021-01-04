@@ -63,8 +63,7 @@ namespace CRS.WEB.Controllers
             {
                 station.Status = int.Parse(status);
             }
-            PathInfo path = new PathInfo();
-            path = Container.Instance.Resolve<IPathInfoService>().GetEntity(pathId);
+            PathInfo  path = Container.Instance.Resolve<IPathInfoService>().GetEntity(pathId);
             station.Path = path;
             Container.Instance.Resolve<IStationInfoService>().Add(station);
             return View();
