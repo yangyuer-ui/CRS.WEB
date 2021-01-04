@@ -1,0 +1,31 @@
+*{
+    margin: 0;
+    padding: 0
+}
+/*头部样式*/
+#titleElement p{
+    font-size: 35px;
+    line-height:60px;
+}
+/*菜单样式*/
+
+/*右侧内容区*/
+.rightContent {
+    margin:0px;
+    padding:0px
+}
+/*底部样式*/
+footer {
+    width: 100%;
+    background: #f5f6fa;
+    padding-top: 30px
+}
+
+.foot_xq p {
+    font: 13px/24px "微软雅黑";
+    color: #000000;
+}
+
+
+.rightContent {
+}

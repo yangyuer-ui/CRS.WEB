@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>查看座</title>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/layui/layui.js"></script>
+</head>
+
+<body>
+
+    <h2 style="font-weight:900;margin-left:120px" class="layui-anim layui-anim-scale">查看定座 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue;font-size:20px;"> Hi！ @ViewBag.UserName</span></h2>
+    <hr style="height:3px" class="layui-bg-black layui-anim layui-anim-scale">
+
+
+
+    <table class="layui-table " id="setseatData" lay-filter="test"></table>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+    </script>
+
+
+    <script>
+        layui.use(['laypage', 'layer', 'table', 'element', 'jquery'], function () {
+            var laypage = layui.laypage //分页
+                , layer = layui.layer //弹层
+                , table = layui.table //表格
+                , element = layui.element //元素操作
+                , $ = layui.jquery;
+
+            //第一个实例
+            function getAll() {
+                table.render({
+                    elem: '#setseatData'
+                    , height: 550
+                    , url: "/SetSeat/SetSeatData" //数据接口
+                    , title: '定座记录表'
+                    , toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+                    , cols: [[ //表头
+                        { type: 'checkbox', fixed: 'left' }
+                        , { field: 'ID', title: 'ID' }
+                        , { field: 'RidingStatus', title: '乘坐状态' }
+                        , { field: 'SeatNumber', title: '座号', sort: true }
+                        , { field: 'SeatTime', title: '定座时间', sort: true }
+                        , { fixed: 'right', width: 165, align: 'center', toolbar: '#barDemo' }
+                    ]],
+                    done: function (res, curr, count) {
+                        $("[data-field='RidingStatus']").children().each(function () {
+                            if ($(this).text() == 'true') {
+                                $(this).text("完成乘坐")
+                            } else if ($(this).text() == 'false') {
+                                $(this).text("未乘坐")
+                            }
+                        });
+                        pageCurr = curr;
+                    }
+                    , page: true//开启分页
+                });
+            }
+
+            getAll();
+
+            //监听行工具事件
+            table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var id = obj.data.ID//获得当前行数据
+                    , layEvent = obj.event; //获得 lay-event 对应的值
+                if (layEvent === 'detail') {
+                    layer.open({
+                        type: 2,
+                        area: ['600px', '500px'],
+                        title: "订座",
+                        content: '/SetSeat/SetSeatDetail?id=' + id,
+                        end: function () {
+                            getAll()
+                        }
+                    });
+                    layer.msg('查看操作');
+                } else if (layEvent === 'del') {
+                    layer.confirm('确定删除行么', {
+                        icon: 3, title: '系统提示'
+                    },
+                        function (index) {
+                            $.ajax({//ajax回传数据删除
+                                type: "POST",
+                                url: "/Task/Delete",
+                                data: { id: id },
+                                success: function (msg) {
+                                    getAll();
+                                }
+                            });
+                            layer.msg("删除成功", {
+                                icon: 6
+                            })
+                            //obj.del(); //删除对应行（tr）的DOM结构
+                            layer.close(index);
+                            getAll()
+                        });
+                } else if (layEvent === 'seat') {
+                    layer.open({
+                        type: 2,
+                        area: ['600px', '500px'],
+                        title: "订座",
+                        content: '/SetSeat/SetSeat?id=' + id,
+                        end: function () {
+                            getAll()
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

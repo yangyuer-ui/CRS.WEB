@@ -1,0 +1,114 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>首页</title>
+    <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link href="~/CSS/HomeIndex.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <div class="container-fluid" id="titleElement">
+        <!-- 头部开始 -->
+        @*<div class="row" id="nav" style="background-color:azure" >
+           
+        </div>*@
+    </div>
+    <!-- 头部结束 -->
+    <!--导航开始-->
+    @*#686de0*@
+    <nav class="navbar navbar-expand-lg navbar-light " style="background-color:#686de0 ">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav mr-auto">
+                @{
+                    var privilegeListParent = (ViewBag.PrivilegeList as IList<CRS.Domain.SysMenu>).Where(o => o.ParentID == null && o.Status == true).OrderBy(o => o.ID).ToList();
+                    var privilegeListChild = (ViewBag.PrivilegeList as IList<CRS.Domain.SysMenu>).Where(o => o.ParentID != null && o.Status == true).OrderBy(o => o.ID).ToList();
+                    foreach (CRS.Domain.SysMenu menu in privilegeListParent)
+                    {
+                        <li class="nav-item dropdown" id="dropdownBtn">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@menu.Name</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @foreach (CRS.Domain.SysMenu item in privilegeListChild.Where(m => m.Status == true && m.ParentID.ID == menu.ID).ToList())
+                                {
+
+                                    @*@Html.ActionLink(item.Name, item.ActionName, item.ControllerName)*@
+                                    <a class="dropdown-item" href="/@item.ControllerName/@item.ActionName" target="FramContent">@item.Name</a>
+                                }
+                            </div>
+
+                        </li>
+                    }
+                }
+            </ul>
+            <img src="~/images/timg.jpg" / style="height:70px;width:400px">
+        </div>
+    </nav>
+
+    <!--导航结束-->
+    <!--内容开始-->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 数据内容开始 -->
+            <section class="rightContent col-md-12 col-xs-12">
+                <iframe id="FramContent" name="FramContent" class="frame" style="height:95vh;width:100%;border:0px;"></iframe>
+            </section>
+            <!-- 数据内容结束 -->
+        </div>
+    </div>
+
+    <!--内容结束-->
+    <!-- 底部开始 -->
+    <div class="container-fluid">
+        <div class="row" id="foot">
+            <div class="foot_xq col-md-4  offset-md-3  col-xs-12">
+                <h3>重庆惠科金渝光电集</h3>
+                <p>
+                    地址：重庆市重庆惠科金渝光电集16号<br>
+                    电话：023-62846626 023-62846636<br>
+                    邮编：400056
+                </p>
+            </div>
+        </div>
+
+    </div>
+    <!-- 底部结束 -->
+
+    <script>
+        $(document).ready(function () {
+            $("#flip").click(function () {
+                $("#panel:eq(" + $(this).index("#flip") + ")").slideToggle("slow");
+            });
+
+
+            $(function () {
+                var menuparent = $(".menuRow div");
+                menuparent.click(function () {
+                    var die = $(this);
+                    //alert("错误！");
+                    if (die.next().is(":hidden")) {
+                        $("#menuchild").hide();
+                        die.next().slideDown(500);
+                    }
+                    else {
+                        die.next().hide(500);
+                    }
+                })
+            })
+        });
+
+    </script>
+
+
+</body>
+
+</html>

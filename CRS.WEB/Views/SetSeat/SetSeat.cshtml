@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "SetSeat";
+    List<int> all = (List<int>)ViewBag.all;
+}
+<link href="~/layui/css/layui.css" rel="stylesheet" />
+<style>
+    #left {
+        display: inline-block;
+    }
+    .seat {
+        height: 50px;
+        width: 34px;
+        background-color: lightskyblue;
+        margin-left: 2px;
+        margin-top: 2px;
+        text-align: center;
+        text-align: center;
+    }
+    .arlseat {
+        height: 50px;
+        width: 34px;
+        background-color: #eee;
+        margin-left: 2px;
+        margin-top: 2px;
+        text-align: center;
+        text-align:center;
+    }
+   .active {
+        background-color:#eee;
+    }
+    h2 {
+        text-align: center;
+    }
+    #seatBox {
+        width: 150px;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+</style>
+<h2>选择座位</h2>
+<form class="layui-form layui-anim layui-anim-upbit" style="" action="/SetSeat/SetSeat" method="post">
+    @Html.Hidden("taskId", (int)ViewBag.id)
+    @Html.Hidden("carNumber", "0")
+    <div id="SeatBox">
+        @{
+            for (int i = 1; i <= @ViewBag.Seat; i++)
+            {
+                if (i % 4 == 0)
+                {
+                    <div style="height:1px;width:100%">
+                    </div>
+                }
+                if (all.Contains(i))
+                {
+                    <div id="left" class="seat">
+                        <img src="~/images/seat.jpg" style="height:30px;width:30px" /><br />
+                        <span>@i</span>
+                    </div>
+                }
+                else
+                {<div id="left" class="arlseat">
+                        <img src="~/images/seat.jpg" style="height:30px;width:30px" /><br />
+                        <span>@i</span>
+                    </div>
+                }
+            }
+        }
+        <div class="layui-input-block" style="margin-top:30px;">
+            <button type="submit" class="layui-btn" lay-submit lay-filter="Sub" id="Sub">订座</button>
+        </div>
+    </div>
+
+</form>
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="~/layui/layui.js"></script>
+<script>
+    $(".seat").mousedown(function () {
+        $(this).siblings().removeClass('active');
+        $(this).toggleClass('active');
+        $("#carNumber").val($(this).children("span").html());
+    });
+    layui.use(['form', 'jquery'], function () {
+        var form = layui.form;
+        var $ = layui.jquery;
+        //监听提交
+        form.on('submit(Sub)', function (data) {
+            layer.confirm('您确认要提交吗？', {
+                btn: ['确认', '取消'] //按钮
+            }, function () {
+                $("form").submit();
+                parent.layer.close(parent.layer.index);//关闭弹出层
+                layer.msg('已提交', { icon: 1 });
+                return false;
+            }, function () {
+                layer.msg('已取消');
+                return false;
+            });
+            return false;
+        });
+
+        form.on('button(close)', function (data) {
+            parent.layer.close(parent.layer.index);//关闭弹出层
+        });
+    });
+
+</script>
+

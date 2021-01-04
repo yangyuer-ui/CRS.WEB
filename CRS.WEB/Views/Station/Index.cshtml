@@ -1,0 +1,147 @@
+﻿
+@{
+    ViewBag.Title = null;
+}
+<link href="~/layui/css/layui.css" rel="stylesheet" />
+<script src="~/layui/layui.js"></script>
+<style>
+    span {
+        background-color: #eee;
+        width: 90px;
+        text-align: center;
+        font-size: 30px;
+    }
+
+    li {
+        font-size: 23px;
+        display: none;
+    }
+
+    ul {
+        display: inline-block;
+    }
+
+    .bigDiv {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+    }
+    #context-menu {
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 10;
+        width: fit-content;
+        height: auto;
+        padding: 5px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        overflow: hidden;
+    }
+</style>
+<div class="bigDiv">
+    @foreach (CRS.Domain.PathInfo path in ViewBag.pathData)
+    {
+        <ul class="path" id="path">
+            <span>@path.PathName</span>
+
+            @foreach (CRS.Domain.StationInfo station in ViewBag.stationData)
+            {
+                if (path.ID == station.Path.ID)
+                {
+                   
+        <li class="station" id="station" data-id="@station.ID">
+            <input type="hidden" value="@station.ID" />@*点击菜单1时，获取到这个value*@
+            @station.StationName
+        </li>
+                }
+            }
+        </ul>
+    }
+<div id="context-menu"></div>
+</div>
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script>
+    $('li').hide();
+
+    $('#path span').click(function () {
+        var curLi = $(this).parent().find('li');              //获得当前点击的菜单的二级菜单
+        var restUl = $(this).parent().siblings('ul');         //获得没有点击的一级菜单
+        // 通过判断二级菜单是否收起，来进行判断是否展开，并更换"+ -"表示
+        if (curLi.css('display') == 'none') {
+            curLi.slideDown();
+            curLi.parent().find('b').text('-');
+        }
+        else {
+            curLi.slideUp();
+            curLi.parent().find('b').text('+');
+        }
+        // 没有点击的二级菜单全部收起，并将标志全部改为"+"
+        restUl.find('li').slideUp();
+        restUl.find('b').text('+');
+    });
+
+    let stationArr = $('.station'); //站点数组
+    //遍历站点
+    for (let index = 0, len = stationArr.length; index < len; index++){
+        const stationItem = stationArr[index];  //每一个站点项
+        stationItem.oncontextmenu = function (e) {  //上下文菜单事件
+            e.preventDefault(); //禁用默认事件
+            $('#context-menu').hide().html('')
+            const stationId = stationItem.getAttribute('data-id');  //站点ID
+            //坐标
+            const x = e.clientX,
+                y = e.clientY;
+            //创建菜单
+            createMenu('添加', 'AddMenu', index, stationId);
+            createMenu('删除', 'DelMenu', index, stationId);
+            createMenu('修改', 'EditMenu', index, stationId);
+            $('#context-menu').css('left',x).css('top',y).show();   //显示自定义右键菜单
+        }
+    }
+
+    //创建菜单项并且插入到菜单框
+    function createMenu(text,menuId,index,stationId) {
+        const menuItem = document.createElement('div'); //创建一个div为菜单项
+        menuItem.setAttribute('id', menuId);
+        menuItem.innerText = text;  //菜单项文字
+        menuItem.addEventListener('click', function () { clickMenuItem(index, menuId, stationId) }, false);    //菜单项点击事件
+        $('#context-menu').append(menuItem);    //将菜单项插入到菜单框中
+    }
+
+    //点击菜单项
+    function clickMenuItem(index, menuId, stationId) {
+        //在此处写对应菜单的业务
+        layui.use(['laypage', 'layer', 'table', 'element', 'jquery'], function () {
+            if (menuId === 'EditMenu') {
+                layer.open({
+                    type: 2,
+                    area: ['600px', '500px'],
+                    title: "编辑用户信息",
+                    content: '/Station/Edit?id=' + stationId,
+                    end: function () {
+                        window.location.reload();
+                    }
+                });
+            } else if (menuId === 'AddMenu') {
+                layer.open({
+                    type: 2,
+                    area: ['600px', '500px'],
+                    title: "编辑用户信息",
+                    content: '/Station/Create',
+                    end: function () {
+                      
+                    }
+                });
+            } else if (menuId === 'DelMenu') {
+
+            }
+        });
+    }
+
+    //隐藏右键菜单
+    window.onclick = function () {
+        $('#context-menu').hide()
+    }
+   
+</script>

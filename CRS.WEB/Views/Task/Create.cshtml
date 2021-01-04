@@ -1,0 +1,132 @@
+﻿@model IEnumerable<CRS.Domain.TaskInfo>
+@{
+    int i = 0;
+    int j = 0;
+}
+
+<link href="~/layui/css/layui.css" rel="stylesheet" />
+
+<h2 style="font-weight:900;margin-left:120px" class="layui-anim layui-anim-scale">新增选课信息</h2>
+<hr style="height:3px" class="layui-bg-blue layui-anim layui-anim-scale">
+
+<form class="layui-form layui-anim layui-anim-upbit" style="margin-left:100px" action="/Task/Create" method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">* </span>司机</label>
+        <div class="layui-input-block" style="width:300px">
+
+            <select name="userid" id="userid">
+                <option value="0">请选择</option>
+                @foreach (CRS.Domain.SysUser item in ViewBag.driver)
+                {
+                    if (j == -1)
+                    {
+                        j++;
+                    }
+                    else
+                    {
+                        <option value="@item.ID">@item.Name</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">* </span>所开班车</label>
+        <div class="layui-input-block" style="width:300px">
+
+            <select name="carid" id="carid">
+                <option value="0">请选择</option>
+
+                @foreach (CRS.Domain.CarInfo item in ViewBag.Car)
+                {
+                    if (i == -1)
+                    {
+                        i++;
+                    }
+                    else
+                    {
+                        <option value="@item.ID">@item.CarNumber</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">* </span>运行路线</label>
+        <div class="layui-input-block" style="width:300px">
+
+            <select name="pathid" id="pathid">
+                <option value="0">请选择</option>
+
+                @foreach (CRS.Domain.PathInfo item in ViewBag.Path)
+                {
+                    if (i == -1)
+                    {
+                        i++;
+                    }
+                    else
+                    {
+                        <option value="@item.ID">@item.PathName</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-inline">
+        <label class="layui-form-label">时间</label>
+        <div class="layui-input-inline">
+            <input type="text" name="startdate" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">* </span>状态</label>
+        <div class="layui-input-block">
+            <input type="checkbox" name="status" value="0" lay-skin="switch" lay-filter="Switch" lay-text="完成发车|未发车">
+        </div>
+    </div>
+
+    <div class="layui-form-item" id="Down">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit lay-filter="Sub" id="Sub">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script src="~/layui/layui.js"></script>
+<script>
+    layui.use(['form', 'jquery','laydate'], function () {
+        var form = layui.form;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+
+        //监听提交
+        form.on('submit(Sub)', function (data) {
+            layer.confirm('您确认要提交吗？', {
+                btn: ['确认', '取消'] //按钮
+            }, function () {
+                    $("form").submit();
+                    parent.layer.close(parent.layer.index);//关闭弹出层
+                layer.msg('已提交', { icon: 1 });
+                return false;
+            }, function () {
+                layer.msg('已取消');
+                return false;
+            });
+            return false;
+        });
+    });
+
+
+</script>
+

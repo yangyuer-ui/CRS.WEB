@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <components>
+    <component id="SysRoleService"
+          service="CRS.Service.ISysRoleService,CRS.Service"
+          type="CRS.Component.SysRoleComponent,CRS.Component"
+          isTransactional="true">
+    </component>
+
+    <component id="SysUserService"
+        service="CRS.Service.ISysUserService,CRS.Service"
+        type="CRS.Component.SysUserComponent,CRS.Component"
+        isTransactional="true">
+    </component>
+
+    <component id="CarInfoService"
+        service="CRS.Service.ICarInfoService,CRS.Service"
+        type="CRS.Component.CarComponent,CRS.Component"
+        isTransactional="true">
+    </component>
+
+    <component id="PathInfoService"
+        service="CRS.Service.IPathInfoService,CRS.Service"
+        type="CRS.Component.PathComponent,CRS.Component"
+        isTransactional="true">
+    </component>
+
+    <component id="SetSeatInfoService"
+        service="CRS.Service.ISetSeatInfoService,CRS.Service"
+        type="CRS.Component.SetSeatComponent,CRS.Component"
+        isTransactional="true">
+    </component>
+
+    <component id="TaskInfoService"
+        service="CRS.Service.ITaskInfoService,CRS.Service"
+        type="CRS.Component.TaskComponent,CRS.Component"
+        isTransactional="true">
+    </component>
+
+    <component id="SysMenuServiceService"
+        service="CRS.Service.ISysMenuService,CRS.Service"
+        type="CRS.Component.SysMenuComponent,CRS.Component"
+        isTransactional="true">
+    </component>
+
+    <component id="StationInfoService"
+        service="CRS.Service.IStationInfoService,CRS.Service"
+        type="CRS.Component.StationComponent,CRS.Component"
+        isTransactional="true">
+    </component>
+  </components>
+</configuration>

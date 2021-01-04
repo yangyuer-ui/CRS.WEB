@@ -1,0 +1,98 @@
+﻿
+<link href="~/layui/css/layui.css" rel="stylesheet" />
+
+<h2 style="font-weight:900;margin-left:120px" class="layui-anim layui-anim-scale">添加班车</h2>
+<hr style="height:3px" class="layui-bg-black layui-anim layui-anim-scale">
+
+<form class="layui-form layui-anim layui-anim-upbit" style="margin-left:100px" action="/Car/Edit" method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">* </span>班车名</label>
+        <div class="layui-input-block">
+            <input type="text" name="carName" required lay-verify="required" placeholder="请输入班车名" autocomplete="off" class="layui-input" style="width:300px;">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">* </span>车牌号</label>
+        <div class="layui-input-block">
+            <input type="text" name="carNumber" required lay-verify="required" placeholder="请输入班车号" autocomplete="off" class="layui-input" style="width:300px;">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">* </span>车型</label>
+        <div class="layui-input-block" style="width:300px">
+            <select name="carType" id="carType">
+                <option value="0">请选择</option>
+                <option value="小型">小型</option>
+                <option value="中型">中型</option>
+                <option value="大型">大型</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">* </span>总座次</label>
+        <div class="layui-input-block">
+            <input type="text" name="TotalSeating" required lay-verify="required" placeholder="请输入总座次" autocomplete="off" class="layui-input" style="width:300px;">
+        </div>
+    </div>
+
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">* </span>是否激活</label>
+        <div class="layui-input-block">
+            <input type="checkbox" name="status" value="0" lay-skin="switch" lay-filter="Switch" lay-text="激活|注销">
+        </div>
+    </div>
+
+    <div class="layui-form-item" id="Down">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit lay-filter="Sub" id="Sub">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script src="~/layui/layui.js"></script>
+<script>
+    layui.use(['form', 'jquery'], function () {
+        var form = layui.form;
+        var $ = layui.jquery;
+        //监听提交
+        form.on('submit(Sub)', function (data) {
+            layer.confirm('您确认要提交吗？', {
+                btn: ['确认', '取消'] //按钮
+            }, function () {
+                $("form").submit();
+                    layer.msg('已提交', { icon: 1 });
+                    parent.layer.close(parent.layer.index);//关闭弹出层
+                return false;
+            }, function () {
+                layer.msg('已取消');
+                return false;
+            });
+            return false;
+        });
+
+
+        //Layui开关
+        form.on('switch(Switch)', function (data) {
+            if (data.elem.checked == true) {
+                $("input[name='status']").attr('value', '1')
+            }
+            else if (data.elem.checked == false) {
+
+                $("input[name='status']").attr('value', '0')
+            }
+        });
+
+
+
+    });
+
+
+</script>
+

@@ -1,0 +1,61 @@
+﻿@model CRS.Domain.SetSeatInfo
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>查看定座信息</title>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+</head>
+
+<body>
+    <h2 style="font-weight:900;margin-left:120px" class="layui-anim layui-anim-scale">查看定座信息</h2>
+    <hr style="height:3px" class="layui-bg-black layui-anim layui-anim-scale">
+
+    <form class="layui-form layui-anim layui-anim-upbit" style="margin-left:100px" action="/SetSeat/SetSeatIndex" method="post">
+        <input hidden type="text" name="id" value="@Model.ID" />
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">班车路线</label>
+            <div class="layui-input-block">
+                <input type="text" name="" lay-verify="required" value="@Model.Task.Path.PathName" autocomplete="off" class="layui-input" style="width:300px;">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">车号</label>
+            <div class="layui-input-block">
+                <input type="text" name="" lay-verify="required" value="@Model.Task.Car.CarNumber" autocomplete="off" class="layui-input" style="width:300px;">
+                
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">定座人</label>
+            <div class="layui-input-block">
+                <input type="text" name="" lay-verify="required" value="@Model.Passenger.Name"  autocomplete="off" class="layui-input" style="width:300px;">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">座位号</label>
+            <div class="layui-input-block">
+                <input type="text" name=""  lay-verify="required" value="@Model.SeatNumber"  autocomplete="off" class="layui-input" style="width:300px;">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">定座时间</label>
+            <div class="layui-input-block">
+                <input type="text" name=""  lay-verify="required" value="@Model.SeatTime"  autocomplete="off" class="layui-input" style="width:300px;">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">乘坐状态</label>
+            <div class="layui-input-block">
+                <input type="text" name="Status"  value="@Model.RidingStatus" lay-skin="switch" >
+            </div>
+        </div>
+    </form>
+    <script src="~/layui/layui.js"></script>
+
+</body>
+</html>
+

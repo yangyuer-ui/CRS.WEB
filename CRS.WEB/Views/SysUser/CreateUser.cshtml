@@ -1,0 +1,118 @@
+﻿
+<link href="~/layui/css/layui.css" rel="stylesheet" />
+
+<h2 style="font-weight:900;margin-left:120px" class="layui-anim layui-anim-scale">创建用户信息</h2>
+<hr style="height:3px" class="layui-bg-black layui-anim layui-anim-scale">
+
+<form class="layui-form layui-anim layui-anim-upbit" style="margin-left:100px" action="/SysUser/CreateUser" method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">* </span>姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="UserName" required lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input" style="width:300px;">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">* </span>账号</label>
+        <div class="layui-input-block">
+            <input type="text" name="Account" required lay-verify="required" placeholder="请输入账号" autocomplete="off" class="layui-input" style="width:300px;">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">* </span>密码</label>
+        <div class="layui-input-block">
+            <input type="text" name="PassWord" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input" style="width:300px;">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">* </span>分配角色</label>
+        <div class="layui-input-block">
+            <input type="text" hidden id="strRoleids" name="roleids">
+            @foreach (CRS.Domain.SysRole item in ViewBag.Role)
+            {
+                <input type="checkbox" lay-filter="RoleIds" value="@item.ID" name="@item.Name" title="@item.Name">
+            }
+
+        </div>
+    </div>
+
+
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span style="color:red;">* </span>是否激活</label>
+        <div class="layui-input-block">
+            <input type="checkbox" name="Status" value="0" lay-skin="switch" lay-filter="Switch" lay-text="激活|注销">
+        </div>
+    </div>
+
+    <div class="layui-form-item" id="Down">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit lay-filter="Sub" id="Sub">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script src="~/layui/layui.js"></script>
+<script>
+    layui.use(['form', 'jquery'], function () {
+        var form = layui.form;
+        var $ = layui.jquery;
+        //监听提交
+        form.on('submit(Sub)', function (data) {
+            layer.confirm('您确认要提交吗？', {
+                btn: ['确认', '取消'] //按钮
+            }, function () {
+                $("form").submit();
+                    layer.msg('已提交', { icon: 1 });
+                    parent.layer.close(parent.layer.index);//关闭弹出层
+                return false;
+            }, function () {
+                layer.msg('已取消');
+                return false;
+            });
+            return false;
+        });
+
+
+        //Layui开关
+        form.on('switch(Switch)', function (data) {
+            if (data.elem.checked == true) {
+                $("input[name='Status']").attr('value', '1')
+            }
+            else if (data.elem.checked == false) {
+
+                $("input[name='Status']").attr('value', '0')
+            }
+        });
+
+
+        //LayuiCheckBox取值
+        form.on('checkbox(RoleIds)', function (data) {
+            var strRoleids = $("#strRoleids"),
+                value = data.value,
+                array = strRoleids.val().split(",");
+
+            if (data.elem.checked) {
+                strRoleids.val(strRoleids.val() + value + ",");
+            }
+            else {
+                var newstrRoleids = "";
+                for (var i = 0; i < array.length; i++) {
+                    var str = array[i];
+                    newstrRoleids += (str != value && str != "" && str != null) ? str + "," : "";
+                }
+                strRoleids.val(newstrRoleids);
+            }
+        });
+
+
+    });
+
+
+</script>
+
