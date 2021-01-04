@@ -50,43 +50,30 @@ namespace CRS.WEB.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateUser(string stationName, int stationCode, string status)
+        public ActionResult Create(int pathId,string stationName, int stationCode, string status)
         {
-            //绑定角色
-            IList<ICriterion> queryrole = new List<ICriterion>();
-            queryrole.Add(Expression.IsNotNull("Status"));
-            ViewBag.Role = Container.Instance.Resolve<ISysRoleService>().Find(queryrole).OrderBy(m => m.ID).ToList();
-
-
-            SysUser user = new SysUser();
-            user.Name = UserName;
-            user.Account = Account;
-            user.PassWord = PassWord;
-            if (Status == null)
+            StationInfo station = new StationInfo();
+            station.StationName = stationName;
+            station.StationCode = stationCode;
+            if (status == null)
             {
-                user.Status = 0;
+                station.Status = 0;
             }
             else
             {
-                user.Status = int.Parse(Status);
+                station.Status = int.Parse(status);
             }
-            user.SysRoleList = new List<SysRole>();
-            SysRole role = new SysRole();
-
-
-            roleids = roleids.Substring(0, roleids.LastIndexOf(","));
-            string[] strArray = roleids.Split(',');
-            foreach (string roleid in strArray)
-            {
-                int newroleid = int.Parse(roleid.ToString());
-                role = Container.Instance.Resolve<ISysRoleService>().GetEntity(newroleid);
-                user.SysRoleList.Add(role);
-            }
-
-            Container.Instance.Resolve<ISysUserService>().Add(user);
+            PathInfo path = new PathInfo();
+            path = Container.Instance.Resolve<IPathInfoService>().GetEntity(pathId);
+            station.Path = path;
+            Container.Instance.Resolve<IStationInfoService>().Add(station);
             return View();
         }
 
+        public void Delete(int stationId)
+        {
+            Container.Instance.Resolve<IStationInfoService>().Delete(stationId);
+        }
 
     }
 }

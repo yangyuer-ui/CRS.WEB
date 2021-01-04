@@ -354,6 +354,7 @@
     <Content Include="Views\Task\HistroyTask.cshtml" />
     <Content Include="Views\Station\Index.cshtml" />
     <Content Include="Views\Station\Edit.cshtml" />
+    <Content Include="Views\Station\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
